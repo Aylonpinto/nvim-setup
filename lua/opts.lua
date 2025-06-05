@@ -26,6 +26,10 @@ vim.opt.clipboard = "unnamedplus"
 -- [[ Terminal ]]
 vim.opt.termguicolors = true
 
+-- [[ Shell ]]
+vim.opt.shell = "/bin/zsh"
+vim.opt.shellcmdflag = "-ic"  -- -i makes it interactive, loading .zshrc
+
 -- [[ Keymaps ]]
 -- General
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
