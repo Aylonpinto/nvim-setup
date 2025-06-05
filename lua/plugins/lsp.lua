@@ -31,39 +31,6 @@ return function()
     end
     vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
-    local bufopts = { noremap = true, silent = true, buffer = bufnr }
-
-    bufopts.desc = "Go to declaration"
-    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
-
-    bufopts.desc = ""
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
-    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
-    vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
-    vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, bufopts)
-    vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
-    vim.keymap.set("n", "<space>wl", function()
-      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, bufopts)
-
-    bufopts.desc = "type definition"
-    vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, bufopts)
-
-    bufopts.desc = "rename"
-    vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
-
-    bufopts.desc = "code_action"
-    vim.keymap.set("n", "<leader>C", vim.lsp.buf.code_action, bufopts)
-
-    bufopts.desc = "references"
-    vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
-
-    bufopts.desc = "format normal"
-    vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, bufopts)
-
-    bufopts.desc = "format visual"
-    vim.keymap.set("v", "<leader>F", vim.lsp.buf.format, bufopts)
   end
 
   local function get_python_path(workspace)
