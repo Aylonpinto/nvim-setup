@@ -49,7 +49,7 @@ return function()
 				end
 			end, { "i", "s" }),
 			
-			["<CR>"] = cmp.mapping(function(fallback)
+			["<S-Tab>"] = cmp.mapping(function(fallback)
 				if cmp.visible() then
 					-- If menu is open, navigate through options
 					cmp.select_next_item()

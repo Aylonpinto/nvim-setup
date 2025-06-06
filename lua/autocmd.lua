@@ -46,3 +46,31 @@ vim.api.nvim_create_autocmd({ "BufUnload", "BufHidden" }, {
         end
     end,
 })
+
+-- Format on save (Jordi's style)
+vim.api.nvim_create_autocmd("BufWritePost", {
+    group = vim.api.nvim_create_augroup("BlackFormatOnSave", { clear = true }),
+    pattern = "*.py",
+    callback = function()
+        vim.fn.system({"black", "-l", "80", "--fast", vim.fn.expand("%:p")})
+        vim.fn.system({"ruff", "--select", "I", "--fix", vim.fn.expand("%:p")})
+        vim.fn.system({"ruff", "--fix", vim.fn.expand("%:p")})
+        vim.cmd("checktime")
+    end,
+})
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+    group = vim.api.nvim_create_augroup("PrettierFormatTS", { clear = true }),
+    pattern = {"*.js", "*.jsx", "*.ts", "*.tsx", "*.json"},
+    callback = function()
+        local file_path = vim.fn.expand("%:p")
+        local cmd = "cd " .. vim.fn.expand("%:p:h") .. " && npx prettier --write " .. file_path
+        vim.fn.jobstart(cmd, {
+            on_exit = function(_, code)
+                if code == 0 then
+                    vim.cmd("checktime")
+                end
+            end,
+        })
+    end,
+})
