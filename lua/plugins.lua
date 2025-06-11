@@ -1,5 +1,5 @@
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
+  local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
     vim.fn.system({
         "git",
         "clone",
@@ -75,17 +75,17 @@ lazy.setup({
     -- LSP Icons and formatting
     "onsails/lspkind.nvim",
 
-    -- LSP Zero framework (disabled - using manual setup only)
-    -- {
-    --     "VonHeikemen/lsp-zero.nvim",
-    --     branch = "v3.x",
-    --     lazy = true,
-    --     config = require("plugins.lsp-starting-point"),
-    --     init = function()
-    --         vim.g.lsp_zero_extend_cmp = 0
-    --         vim.g.lsp_zero_extend_lspconfig = 0
-    --     end,
-    -- },
+    -- LSP Zero framework
+    {
+        "VonHeikemen/lsp-zero.nvim",
+        branch = "v3.x",
+        lazy = true,
+        config = require("plugins.lsp-starting-point"),
+        init = function()
+            vim.g.lsp_zero_extend_cmp = 0
+            vim.g.lsp_zero_extend_lspconfig = 0
+        end,
+    },
 
     -- Mason for LSP server management
     {
