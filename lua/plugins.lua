@@ -1,5 +1,5 @@
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
     vim.fn.system({
         "git",
         "clone",
@@ -149,5 +149,25 @@ lazy.setup({
         config = function()
             require("nvim-surround").setup({})
         end
+    },
+
+    -- Statusline
+    {
+        "nvim-lualine/lualine.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        config = function()
+            require("lualine").setup({
+                options = {
+                    theme = "nightfox"
+                }
+            })
+        end
+    },
+
+    -- Tabline
+    {
+        "nanozuki/tabby.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        config = require("plugins.tabby"),
     },
 })
