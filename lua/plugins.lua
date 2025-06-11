@@ -140,4 +140,14 @@ lazy.setup({
             })
         end,
     },
+
+    -- Surround plugin for wrapping text with brackets, quotes, etc.
+    {
+        "kylechui/nvim-surround",
+        version = "*",
+        event = "VeryLazy",
+        config = function()
+            require("nvim-surround").setup({})
+        end
+    },
 })
