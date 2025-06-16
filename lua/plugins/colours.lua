@@ -16,16 +16,9 @@ return function()
             },
         },
         specs = {
-            nordfox = {
+            nightfox = {
                 syntax = {
-                    -- keyword = "#81A1C1",      -- Nord blue for keywords
-                    type = "#B48EAD",         -- Nord purple for types
-                    -- variable = "#D8DEE9",     -- Nord light gray for variables
-                    -- string = "#A3BE8C",       -- Nord green for strings
-                    -- number = "#B48EAD",       -- Nord purple for numbers
-                    -- constant = "#D08770",     -- Nord orange for constants
-                    -- conditional = "#5E81AC",  -- Nord dark blue for conditionals
-                    -- operator = "#ECEFF4",     -- Nord white for operators
+                    comment = "#6b7089",      -- Dimmed gray for comments
                 },
             },
         },

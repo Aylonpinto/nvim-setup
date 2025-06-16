@@ -34,7 +34,7 @@ vim.opt.shellcmdflag = "-ic"  -- -i makes it interactive, loading .zshrc
 -- General
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>p", "<cmd>Telescope find_files<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>f", "<cmd>Telescope live_grep<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>f", "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", { noremap = true, silent = true })
 
 -- [[ Splits ]]
 vim.opt.splitright = true -- bool: Place new window to right of current one
@@ -63,7 +63,30 @@ vim.keymap.set("n", "<leader>gb", function() require("gitsigns").toggle_current_
 
 
 -- [[ LSP Keymaps ]]
-vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { noremap = true, silent = true, desc = "Go to declaration" })
+vim.keymap.set("n", "gD", function()
+  local current_file = vim.fn.expand('%:p')
+  local params = vim.lsp.util.make_position_params()
+  
+  vim.lsp.buf_request(0, 'textDocument/definition', params, function(err, result)
+    if err or not result or vim.tbl_isempty(result) then
+      return
+    end
+    local def_uri = result[1].uri or result[1].targetUri
+    local def_file = vim.uri_to_fname(def_uri)
+    local def_range = result[1].range or result[1].targetRange
+    
+    if def_file ~= current_file then
+      vim.cmd('vsplit')
+      vim.cmd('edit ' .. vim.fn.fnameescape(def_file))
+      -- Jump to the specific position
+      local row = def_range.start.line + 1
+      local col = def_range.start.character + 1
+      vim.api.nvim_win_set_cursor(0, {row, col - 1})
+    else
+      vim.lsp.buf.definition()
+    end
+  end)
+end, { noremap = true, silent = true, desc = "Go to definition in split if different file" })
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true, desc = "Go to definition" })
 vim.keymap.set("n", "gr", vim.lsp.buf.references, { noremap = true, silent = true, desc = "Show references" })
 vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { noremap = true, silent = true, desc = "Go to implementation" })
@@ -93,3 +116,11 @@ vim.keymap.set("n", "<leader>cp", function()
   vim.fn.setreg('+', path)
   print('Copied: ' .. path)
 end, { desc = "Copy relative path to clipboard" })
+
+-- Tab navigation with Ctrl + number
+for i = 1, 9 do
+  vim.keymap.set("n", "<C-" .. i .. ">", ":tabn " .. i .. "<CR>", { desc = "Go to tab " .. i })
+end
+
+-- Close current tab
+vim.keymap.set("n", "<C-q>", ":tabclose<CR>", { desc = "Close current tab" })

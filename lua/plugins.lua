@@ -44,7 +44,14 @@ lazy.setup({
     -- Telescope
     {
         "nvim-telescope/telescope.nvim",
-        dependencies = { "nvim-lua/plenary.nvim" },
+        dependencies = { 
+            "nvim-lua/plenary.nvim",
+            "nvim-telescope/telescope-live-grep-args.nvim",
+            {
+                "nvim-telescope/telescope-fzf-native.nvim",
+                build = "make"
+            }
+        },
         config = require("plugins.telescope"),
     },
 
@@ -70,6 +77,18 @@ lazy.setup({
         dependencies = {
             "zbirenbaum/copilot-cmp",
         },
+    },
+    {
+        "CopilotC-Nvim/CopilotChat.nvim",
+        dependencies = {
+            { "zbirenbaum/copilot.lua" },
+            { "nvim-lua/plenary.nvim" },
+        },
+        config = function()
+            require("CopilotChat").setup({
+                debug = false,
+            })
+        end,
     },
 
     -- LSP Icons and formatting
