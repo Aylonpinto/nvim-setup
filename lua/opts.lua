@@ -34,7 +34,7 @@ vim.opt.shellcmdflag = "-ic"  -- -i makes it interactive, loading .zshrc
 -- General
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>p", "<cmd>Telescope find_files<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>f", "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>f", "<cmd>Telescope live_grep<CR>", { noremap = true, silent = true })
 
 -- [[ Splits ]]
 vim.opt.splitright = true -- bool: Place new window to right of current one

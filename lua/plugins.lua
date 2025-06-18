@@ -74,9 +74,6 @@ lazy.setup({
     {
         "zbirenbaum/copilot.lua",
         config = require("plugins.copilot-integration"),
-        dependencies = {
-            "zbirenbaum/copilot-cmp",
-        },
     },
     {
         "CopilotC-Nvim/CopilotChat.nvim",
@@ -132,7 +129,7 @@ lazy.setup({
     {
         "neovim/nvim-lspconfig",
         opts = {
-            inlay_hints = { enabled = true },
+            inlay_hints = { enabled = false },
         },
         cmd = { "LspInfo", "LspInstall", "LspStart" },
         event = { "BufReadPre", "BufNewFile" },
@@ -156,6 +153,18 @@ lazy.setup({
                 handler_opts = {
                     border = "rounded"
                 }
+            })
+        end,
+    },
+
+    -- Enhanced LSP rename
+    {
+        "smjonas/inc-rename.nvim",
+        config = function()
+            require("inc_rename").setup({
+                post_hook = function()
+                    vim.cmd("wa")
+                end,
             })
         end,
     },

@@ -23,10 +23,8 @@ return function()
 
   local on_attach = function(client, bufnr)
     if client.server_capabilities.inlayHintProvider then
-      if vim.lsp.inlay_hint and type(vim.lsp.inlay_hint) == "function" then
-        vim.lsp.inlay_hint(bufnr, true)
-      elseif vim.lsp.inlay_hint and type(vim.lsp.inlay_hint) == "table" and vim.lsp.inlay_hint.enable then
-        vim.lsp.inlay_hint.enable(true)
+      if vim.lsp.inlay_hint and vim.lsp.inlay_hint.enable then
+        vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
       end
     end
     vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")

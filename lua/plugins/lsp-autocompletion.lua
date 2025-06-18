@@ -16,7 +16,6 @@ return function()
 
 	cmp.setup({
 		sources = {
-			{ name = "copilot" },
 			{ name = "nvim_lsp" },
       { name = "path", option = { label_trailing_slash = true } }, -- Allow trailing slashes
 			{ name = "luasnip" },
@@ -32,18 +31,11 @@ return function()
 		},
 
 		mapping = {
+			["<C-Tab>"] = cmp.mapping.complete(),
 			["<Tab>"] = cmp.mapping(function(fallback)
 				if cmp.visible() then
-					-- If menu is open, select highlighted item
-					cmp.confirm({ select = true })
-				elseif has_words_before() then
-					-- If typing, complete first item immediately
-					cmp.complete()
-					vim.defer_fn(function()
-						if cmp.visible() then
-							cmp.confirm({ select = true })
-						end
-					end, 50)
+					-- If menu is open, navigate through options
+					cmp.select_next_item()
 				else
 					fallback()
 				end
@@ -51,15 +43,23 @@ return function()
 			
 			["<S-Tab>"] = cmp.mapping(function(fallback)
 				if cmp.visible() then
-					-- If menu is open, navigate through options
-					cmp.select_next_item()
-				elseif has_words_before() then
-					-- If typing, open completion menu
-					cmp.complete()
+					-- If menu is open, navigate backwards through options
+					cmp.select_prev_item()
 				else
 					fallback()
 				end
-			end, { "i" }),
+			end, { "i", "s" }),
+			
+			["<CR>"] = cmp.mapping(function(fallback)
+				if cmp.visible() then
+					-- If menu is open, accept selected completion
+					cmp.confirm({ select = true })
+				else
+					fallback()
+				end
+			end, { "i", "s" }),
+			
+			["<C-]>"] = cmp.mapping.abort(),
 		},
 	})
 end

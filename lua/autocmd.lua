@@ -75,11 +75,9 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     end,
 })
 
--- Auto-save all files after LSP rename
-vim.api.nvim_create_autocmd("LspRequest", {
-    callback = function(args)
-        if args.data and args.data.method == "textDocument/rename" then
-            vim.cmd("wa")
-        end
+-- Enhanced LSP rename with inc-rename
+vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(event)
+        vim.keymap.set("n", "<leader>rn", ":IncRename ", { buffer = event.buf, desc = "Incremental rename" })
     end,
 })

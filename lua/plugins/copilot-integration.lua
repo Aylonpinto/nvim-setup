@@ -1,8 +1,19 @@
 return function()
-    -- Configure Copilot for nvim-cmp integration
+    -- Configure Copilot for inline suggestions
     require("copilot").setup({
-        suggestion = { enabled = false }, -- Disable inline suggestions (use cmp instead)
-        panel = { enabled = false },      -- Disable copilot panel (use cmp instead)
+        suggestion = { 
+            enabled = true,
+            auto_trigger = true,
+            keymap = {
+                accept = "<Tab>",
+                accept_word = false,
+                accept_line = false,
+                next = "<M-]>",
+                prev = "<M-[>",
+                dismiss = "<C-]>",
+            },
+        },
+        panel = { enabled = false },     -- Disable copilot panel
         filetypes = {
             yaml = false,
             markdown = false,
@@ -14,10 +25,8 @@ return function()
             cvs = false,
             ["."] = false,
         },
-        copilot_node_command = 'node', -- Node.js version must be > 18.x
+        copilot_node_command = '/Users/aylonpinto/.nvm/versions/node/v20.10.0/bin/node',
         server_opts_overrides = {},
     })
 
-    -- Configure copilot-cmp
-    require("copilot_cmp").setup()
 end
