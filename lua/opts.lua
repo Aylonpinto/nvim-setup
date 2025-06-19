@@ -124,3 +124,64 @@ end
 
 -- Close current tab
 vim.keymap.set("n", "<C-q>", ":tabclose<CR>", { desc = "Close current tab" })
+
+-- Window cycling with wrap-around
+vim.keymap.set("n", "<C-w>h", function()
+  local current_win = vim.api.nvim_get_current_win()
+  vim.cmd("wincmd h")
+  if vim.api.nvim_get_current_win() == current_win then
+    vim.cmd("wincmd l")
+    while vim.api.nvim_get_current_win() ~= current_win do
+      local next_win = vim.api.nvim_get_current_win()
+      vim.cmd("wincmd l")
+      if vim.api.nvim_get_current_win() == next_win then
+        break
+      end
+    end
+  end
+end, { desc = "Cycle window left with wrap" })
+
+vim.keymap.set("n", "<C-w>l", function()
+  local current_win = vim.api.nvim_get_current_win()
+  vim.cmd("wincmd l")
+  if vim.api.nvim_get_current_win() == current_win then
+    vim.cmd("wincmd h")
+    while vim.api.nvim_get_current_win() ~= current_win do
+      local next_win = vim.api.nvim_get_current_win()
+      vim.cmd("wincmd h")
+      if vim.api.nvim_get_current_win() == next_win then
+        break
+      end
+    end
+  end
+end, { desc = "Cycle window right with wrap" })
+
+vim.keymap.set("n", "<C-w>j", function()
+  local current_win = vim.api.nvim_get_current_win()
+  vim.cmd("wincmd j")
+  if vim.api.nvim_get_current_win() == current_win then
+    vim.cmd("wincmd k")
+    while vim.api.nvim_get_current_win() ~= current_win do
+      local next_win = vim.api.nvim_get_current_win()
+      vim.cmd("wincmd k")
+      if vim.api.nvim_get_current_win() == next_win then
+        break
+      end
+    end
+  end
+end, { desc = "Cycle window down with wrap" })
+
+vim.keymap.set("n", "<C-w>k", function()
+  local current_win = vim.api.nvim_get_current_win()
+  vim.cmd("wincmd k")
+  if vim.api.nvim_get_current_win() == current_win then
+    vim.cmd("wincmd j")
+    while vim.api.nvim_get_current_win() ~= current_win do
+      local next_win = vim.api.nvim_get_current_win()
+      vim.cmd("wincmd j")
+      if vim.api.nvim_get_current_win() == next_win then
+        break
+      end
+    end
+  end
+end, { desc = "Cycle window up with wrap" })
