@@ -31,21 +31,27 @@ return function()
 		},
 
 		mapping = {
-			["<C-Tab>"] = cmp.mapping.complete(),
-			["<Tab>"] = cmp.mapping(function(fallback)
+			["<S-Tab>"] = cmp.mapping(function(fallback)
 				if cmp.visible() then
-					-- If menu is open, navigate through options
-					cmp.select_next_item()
+					if cmp.get_selected_entry() then
+						-- If menu is open and item selected, navigate backwards
+						cmp.select_prev_item()
+					else
+						-- If menu is open but nothing selected, select first item
+						cmp.select_next_item()
+					end
 				else
-					fallback()
+					-- Open completion menu
+					cmp.complete()
 				end
 			end, { "i", "s" }),
 			
-			["<S-Tab>"] = cmp.mapping(function(fallback)
-				if cmp.visible() then
-					-- If menu is open, navigate backwards through options
-					cmp.select_prev_item()
+			["<Tab>"] = cmp.mapping(function(fallback)
+				if cmp.visible() and cmp.get_selected_entry() then
+					-- Only navigate if menu is open AND an item is selected
+					cmp.select_next_item()
 				else
+					-- Always fallback to Copilot
 					fallback()
 				end
 			end, { "i", "s" }),

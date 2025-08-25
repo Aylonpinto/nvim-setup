@@ -117,6 +117,13 @@ vim.keymap.set("n", "<leader>cp", function()
   print('Copied: ' .. path)
 end, { desc = "Copy relative path to clipboard" })
 
+-- Copy file path with line and column
+vim.keymap.set("n", "<leader>cc", function()
+  local path = vim.fn.expand('%') .. ':' .. vim.fn.line('.') .. ':' .. vim.fn.col('.')
+  vim.fn.setreg('+', path)
+  print('Copied: ' .. path)
+end, { desc = "Copy path with line:col to clipboard" })
+
 -- Tab navigation with Ctrl + number
 for i = 1, 9 do
   vim.keymap.set("n", "<C-" .. i .. ">", ":tabn " .. i .. "<CR>", { desc = "Go to tab " .. i })
@@ -185,3 +192,6 @@ vim.keymap.set("n", "<C-w>k", function()
     end
   end
 end, { desc = "Cycle window up with wrap" })
+
+vim.keymap.set("n", "c", '"_c', { noremap = true, silent = true })
+vim.keymap.set("v", "c", '"_c', { noremap = true, silent = true })
