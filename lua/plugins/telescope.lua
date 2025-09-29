@@ -16,13 +16,21 @@ return function()
                 i = {
                     ["<CR>"] = function(prompt_bufnr)
                         local actions = require("telescope.actions")
-                        actions.select_tab(prompt_bufnr)
+                        actions.select_default(prompt_bufnr)  -- Replace current buffer
+                    end,
+                    ["<C-t>"] = function(prompt_bufnr)
+                        local actions = require("telescope.actions")
+                        actions.select_tab(prompt_bufnr)  -- Open in new tab
                     end,
                 },
                 n = {
                     ["<CR>"] = function(prompt_bufnr)
                         local actions = require("telescope.actions")
-                        actions.select_tab(prompt_bufnr)
+                        actions.select_default(prompt_bufnr)  -- Replace current buffer
+                    end,
+                    ["<C-t>"] = function(prompt_bufnr)
+                        local actions = require("telescope.actions")
+                        actions.select_tab(prompt_bufnr)  -- Open in new tab
                     end,
                 },
             },

@@ -49,11 +49,10 @@ vim.api.nvim_create_autocmd({ "BufUnload", "BufHidden" }, {
 
 -- Format on save (Jordi's style)
 vim.api.nvim_create_autocmd("BufWritePost", {
-    group = vim.api.nvim_create_augroup("BlackFormatOnSave", { clear = true }),
+    group = vim.api.nvim_create_augroup("RuffFormatOnSave", { clear = true }),
     pattern = "*.py",
     callback = function()
-        vim.fn.system({"black", "-l", "80", "--fast", vim.fn.expand("%:p")})
-        vim.fn.system({"ruff", "--select", "I", "--fix", vim.fn.expand("%:p")})
+        vim.fn.system({"ruff", "format", vim.fn.expand("%:p")})
         vim.fn.system({"ruff", "--fix", vim.fn.expand("%:p")})
         vim.cmd("checktime")
     end,

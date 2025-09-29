@@ -33,7 +33,7 @@ vim.opt.shellcmdflag = "-ic"  -- -i makes it interactive, loading .zshrc
 -- [[ Keymaps ]]
 -- General
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>p", "<cmd>Telescope find_files<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>p", "<cmd>Telescope find_files hidden=true<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>f", "<cmd>Telescope live_grep<CR>", { noremap = true, silent = true })
 
 -- [[ Splits ]]

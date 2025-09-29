@@ -198,4 +198,12 @@ lazy.setup({
         dependencies = { "nvim-tree/nvim-web-devicons" },
         config = require("plugins.tabby"),
     },
+
+    -- Displays coverage information in the sign column.
+    -- https://github.com/andythigpen/nvim-coverage
+    {
+        "andythigpen/nvim-coverage",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        config = require("plugins.coverage"),
+    },
 })
