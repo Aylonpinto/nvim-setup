@@ -30,6 +30,9 @@ vim.opt.termguicolors = true
 vim.opt.shell = "/bin/zsh"
 vim.opt.shellcmdflag = "-ic"  -- -i makes it interactive, loading .zshrc
 
+-- [[ Coverage ]]
+vim.g.coverage_loaded = 0
+
 -- [[ Keymaps ]]
 -- General
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })

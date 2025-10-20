@@ -67,7 +67,6 @@ return function()
     before_init = function(_, config)
       local python_path = get_python_path(config.root_dir)
       config.settings.python.pythonPath = python_path
-      vim.notify("Python: " .. python_path .. " | Root: " .. config.root_dir)
     end,
     on_attach = on_attach,
   })

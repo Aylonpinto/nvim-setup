@@ -21,13 +21,9 @@ return function()
             min_coverage = 80.0,
         },
         lang = {
-            python = {
-                coverage_file = "cov.xml",
-                coverage_command = nil, -- disable JSON command, use XML file
-            },
+            -- Let plugin use defaults for .coverage file
         },
-        auto_reload = true,
-        auto_reload_timeout_ms = 500,
+        auto_reload = false,
         load_coverage_cb = function(ftype)
             vim.g.coverage_loaded = 1
             vim.notify("Loaded + Cleared  " .. ftype .. " coverage")

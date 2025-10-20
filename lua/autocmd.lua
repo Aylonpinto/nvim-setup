@@ -47,6 +47,29 @@ vim.api.nvim_create_autocmd({ "BufUnload", "BufHidden" }, {
     end,
 })
 
+-- Load coverage for Python files (Jordi's style)
+vim.api.nvim_create_autocmd("FileType", {
+    group = vim.api.nvim_create_augroup("test_coverage_show", { clear = true }),
+    pattern = "python",
+    callback = function()
+        local python_root = vim.fn.fnamemodify(
+            vim.fn.findfile("pyproject.toml", ".;") or
+            vim.fn.findfile("setup.py", ".;") or
+            vim.fn.getcwd(),
+            ":p:h"
+        )
+        local coverage_path = python_root .. "/.coverage"
+        local file_exists = io.open(coverage_path, "r") ~= nil
+
+        if file_exists and vim.g.coverage_loaded == 0 then
+            vim.cmd("cd " .. python_root)
+            require("coverage").load(true)
+            require("coverage").show()
+            vim.g.coverage_loaded = 1
+        end
+    end,
+})
+
 -- Format on save (Jordi's style)
 vim.api.nvim_create_autocmd("BufWritePost", {
     group = vim.api.nvim_create_augroup("RuffFormatOnSave", { clear = true }),
