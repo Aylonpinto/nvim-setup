@@ -86,7 +86,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     pattern = {"*.js", "*.jsx", "*.ts", "*.tsx", "*.json"},
     callback = function()
         local file_path = vim.fn.expand("%:p")
-        local cmd = "cd " .. vim.fn.expand("%:p:h") .. " && npx prettier --write " .. file_path
+        local cmd = {"prettier", "--write", file_path}
         vim.fn.jobstart(cmd, {
             on_exit = function(_, code)
                 if code == 0 then
