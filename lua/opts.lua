@@ -30,6 +30,16 @@ vim.opt.termguicolors = true
 vim.opt.shell = "/bin/zsh"
 vim.opt.shellcmdflag = "-ic"  -- -i makes it interactive, loading .zshrc
 
+-- Preserve virtual environment from parent shell
+local venv = vim.fn.getenv("VIRTUAL_ENV")
+if venv ~= vim.NIL and venv ~= "" then
+    vim.env.VIRTUAL_ENV = venv
+    local venv_bin = venv .. "/bin"
+    if vim.fn.isdirectory(venv_bin) == 1 then
+        vim.env.PATH = venv_bin .. ":" .. vim.env.PATH
+    end
+end
+
 -- [[ Coverage ]]
 vim.g.coverage_loaded = 0
 
@@ -90,7 +100,30 @@ vim.keymap.set("n", "gD", function()
     end
   end)
 end, { noremap = true, silent = true, desc = "Go to definition in split if different file" })
-vim.keymap.set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true, desc = "Go to definition" })
+vim.keymap.set("n", "gd", function()
+  local current_file = vim.fn.expand('%:p')
+  local params = vim.lsp.util.make_position_params()
+
+  vim.lsp.buf_request(0, 'textDocument/definition', params, function(err, result)
+    if err or not result or vim.tbl_isempty(result) then
+      return
+    end
+    local def_uri = result[1].uri or result[1].targetUri
+    local def_file = vim.uri_to_fname(def_uri)
+    local def_range = result[1].range or result[1].targetRange
+
+    if def_file ~= current_file then
+      vim.cmd('tabnew')
+      vim.cmd('edit ' .. vim.fn.fnameescape(def_file))
+      -- Jump to the specific position
+      local row = def_range.start.line + 1
+      local col = def_range.start.character + 1
+      vim.api.nvim_win_set_cursor(0, {row, col - 1})
+    else
+      vim.lsp.buf.definition()
+    end
+  end)
+end, { noremap = true, silent = true, desc = "Go to definition (tab if different file)" })
 vim.keymap.set("n", "gr", vim.lsp.buf.references, { noremap = true, silent = true, desc = "Show references" })
 vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { noremap = true, silent = true, desc = "Go to implementation" })
 vim.keymap.set("n", "K", vim.lsp.buf.hover, { noremap = true, silent = true, desc = "Hover documentation" })

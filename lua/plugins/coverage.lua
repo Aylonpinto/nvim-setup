@@ -23,10 +23,9 @@ return function()
         lang = {
             -- Let plugin use defaults for .coverage file
         },
-        auto_reload = false,
+        auto_reload = true,
         load_coverage_cb = function(ftype)
-            vim.g.coverage_loaded = 1
-            vim.notify("Loaded + Cleared  " .. ftype .. " coverage")
+            vim.notify("Loaded " .. ftype .. " coverage")
         end,
     })
 end
