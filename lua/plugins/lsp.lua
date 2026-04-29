@@ -73,6 +73,9 @@ return function()
 
   lsp.ruff.setup({
     on_attach = on_attach,
+    on_init = function(client)
+      client.offset_encoding = "utf-16"
+    end,
     init_options = {
       settings = {
         args = {},

@@ -55,6 +55,22 @@ lazy.setup({
         config = require("plugins.telescope"),
     },
 
+    -- GitHub integration
+    {
+        "pwntester/octo.nvim",
+        cmd = "Octo",
+        keys = {
+            { "<leader>pr", "<cmd>Octo pr list<CR>", desc = "Octo PR list" },
+            { "<leader>r", "<cmd>Octo pr checkout<CR><cmd>Octo review<CR>", desc = "Octo checkout + review" },
+        },
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-telescope/telescope.nvim",
+            "nvim-tree/nvim-web-devicons",
+        },
+        config = require("plugins.octo"),
+    },
+
     -- Git-integratie
     {
         "NeogitOrg/neogit",
