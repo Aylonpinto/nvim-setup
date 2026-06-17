@@ -61,7 +61,7 @@ lazy.setup({
         cmd = "Octo",
         keys = {
             { "<leader>pr", "<cmd>Octo pr list<CR>", desc = "Octo PR list" },
-            { "<leader>r", "<cmd>Octo pr checkout<CR><cmd>Octo review<CR>", desc = "Octo checkout + review" },
+            { "<leader>r", "<cmd>Octo review<CR>", desc = "Octo review" },
         },
         dependencies = {
             "nvim-lua/plenary.nvim",
