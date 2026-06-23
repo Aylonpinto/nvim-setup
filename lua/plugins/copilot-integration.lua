@@ -25,7 +25,7 @@ return function()
             cvs = false,
             ["."] = false,
         },
-        copilot_node_command = '/Users/aylonpinto/.nvm/versions/node/v20.10.0/bin/node',
+        copilot_node_command = vim.fn.exepath("node"),
         server_opts_overrides = {},
     })
 

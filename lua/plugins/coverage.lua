@@ -21,7 +21,9 @@ return function()
             min_coverage = 80.0,
         },
         lang = {
-            -- Let plugin use defaults for .coverage file
+            python = {
+                coverage_command = ".venv/bin/coverage json --fail-under=0 -q -o -",
+            },
         },
         auto_reload = true,
         load_coverage_cb = function(ftype)
