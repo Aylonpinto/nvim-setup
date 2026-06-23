@@ -103,3 +103,31 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set("n", "<leader>rn", ":IncRename ", { buffer = event.buf, desc = "Incremental rename" })
     end,
 })
+
+-- "Ruled paper": a full-width underline under every row, so the buffer looks
+-- like a grid of rows. Only applied to normal file buffers (skips nvim-tree,
+-- telescope, neogit, etc.). Tweak `sp` for the line colour.
+local ruled_ns = vim.api.nvim_create_namespace("ruled_paper")
+local function set_ruled_hl()
+    -- dotted, very subtle rule under each row (nightfox-native shade)
+    vim.api.nvim_set_hl(0, "RuledPaper", { underdotted = true, sp = "#29394f" })
+end
+set_ruled_hl()
+-- re-apply after any colorscheme load (colorschemes clear custom highlights)
+vim.api.nvim_create_autocmd("ColorScheme", { callback = set_ruled_hl })
+vim.api.nvim_set_decoration_provider(ruled_ns, {
+    on_win = function(_, _, bufnr)
+        return vim.bo[bufnr].buftype == "" -- false → skip on_line for special buffers
+    end,
+    on_line = function(_, _, bufnr, row)
+        -- Use a range `hl_group` (not `line_hl_group`) so it renders with ephemeral
+        -- extmarks — line_hl_group is broken for ephemeral (neovim#32936).
+        vim.api.nvim_buf_set_extmark(bufnr, ruled_ns, row, 0, {
+            end_row = row + 1,
+            end_col = 0,
+            hl_group = "RuledPaper",
+            hl_eol = true, -- extend the underline to full window width
+            ephemeral = true,
+        })
+    end,
+})
