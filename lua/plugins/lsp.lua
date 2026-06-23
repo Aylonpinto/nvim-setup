@@ -1,8 +1,4 @@
 return function()
-  local lsp = require("lspconfig")
-  local util = require("lspconfig/util")
-  local path = util.path
-
   require("mason").setup()
   require("mason-lspconfig").setup({
     ensure_installed = {
@@ -17,37 +13,35 @@ return function()
     automatic_enable = false,
   })
 
-  local lsp_flags = {
-    debounce_text_changes = 150,
-  }
-
   local on_attach = function(client, bufnr)
     if client.server_capabilities.inlayHintProvider then
       if vim.lsp.inlay_hint and vim.lsp.inlay_hint.enable then
         vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
       end
     end
-    vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-
+    vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
   end
 
   local function get_python_path(workspace)
     if vim.env.VIRTUAL_ENV then
-      return path.join(vim.env.VIRTUAL_ENV, "bin", "python")
+      return vim.fs.joinpath(vim.env.VIRTUAL_ENV, "bin", "python")
     end
 
     for _, pattern in ipairs({ "*", ".*" }) do
-      local match = vim.fn.glob(path.join(workspace, pattern, "pyvenv.cfg")) or ""
+      local match = vim.fn.glob(vim.fs.joinpath(workspace or ".", pattern, "pyvenv.cfg")) or ""
       if match ~= "" and match ~= nil then
-        return path.join(path.dirname(match), "bin", "python")
+        return vim.fs.joinpath(vim.fs.dirname(match), "bin", "python")
       end
     end
 
     return vim.fn.exepath("python3") or vim.fn.exepath("python") or "python"
   end
 
-  lsp.basedpyright.setup({
-    root_dir = util.root_pattern("pyproject.toml", "setup.py", "setup.cfg", ".git"),
+  local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+  vim.lsp.config("basedpyright", {
+    capabilities = capabilities,
+    root_markers = { "pyproject.toml", "setup.py", "setup.cfg", ".git" },
     settings = {
       basedpyright = {
         analysis = {
@@ -55,23 +49,24 @@ return function()
           diagnosticMode = "openFilesOnly",
           useLibraryCodeForTypes = true,
           diagnosticSeverityOverrides = {
-            reportUnusedCallResult = false
+            reportUnusedCallResult = false,
           },
         },
       },
       python = {
-        analysis = {
-        },
-      }
+        analysis = {},
+      },
     },
     before_init = function(_, config)
       local python_path = get_python_path(config.root_dir)
+      config.settings.python = config.settings.python or {}
       config.settings.python.pythonPath = python_path
     end,
     on_attach = on_attach,
   })
 
-  lsp.ruff.setup({
+  vim.lsp.config("ruff", {
+    capabilities = capabilities,
     on_attach = on_attach,
     on_init = function(client)
       client.offset_encoding = "utf-16"
@@ -83,8 +78,8 @@ return function()
     },
   })
 
-
-  lsp.svelte.setup({
+  vim.lsp.config("svelte", {
+    capabilities = capabilities,
     filetypes = { "svelte", "html", "css" },
     on_attach = function(client, bufnr)
       vim.api.nvim_create_autocmd("BufWritePre", {
@@ -103,9 +98,7 @@ return function()
     },
   })
 
-  local capabilities = require("cmp_nvim_lsp").default_capabilities()
-  
-  lsp.ts_ls.setup({
+  vim.lsp.config("ts_ls", {
     capabilities = capabilities,
     on_attach = function(client, bufnr)
       client.server_capabilities.documentFormattingProvider = false
@@ -114,18 +107,19 @@ return function()
     settings = {
       typescript = {
         format = {
-          enable = false
-        }
+          enable = false,
+        },
       },
       javascript = {
         format = {
-          enable = false
-        }
-      }
-    }
+          enable = false,
+        },
+      },
+    },
   })
 
-  lsp.eslint.setup({
+  vim.lsp.config("eslint", {
+    capabilities = capabilities,
     on_attach = function(client, bufnr)
       vim.api.nvim_create_autocmd("BufWritePre", {
         buffer = bufnr,
@@ -139,21 +133,21 @@ return function()
     settings = {
       useESLintClass = false,
       experimental = {
-        useFlatConfig = true
+        useFlatConfig = true,
       },
       workingDirectories = { { mode = "auto" } },
       validate = "on",
       packageManager = "npm",
       codeActionOnSave = {
         enable = true,
-        mode = "all"
+        mode = "all",
       },
-      format = true
-    }
+      format = true,
+    },
   })
 
-
-  lsp.jsonls.setup({
+  vim.lsp.config("jsonls", {
+    capabilities = capabilities,
     settings = {
       json = {
         schemas = require("schemastore").json.schemas(),
@@ -161,10 +155,9 @@ return function()
       },
     },
     on_attach = function(client, bufnr)
-      local function buf_set_option(...)
-        vim.api.nvim_buf_set_option(bufnr, ...)
-      end
-      buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+      vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
     end,
   })
+
+  vim.lsp.enable({ "basedpyright", "ruff", "svelte", "ts_ls", "eslint", "jsonls" })
 end
