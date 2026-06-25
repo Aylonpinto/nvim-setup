@@ -107,27 +107,40 @@ vim.api.nvim_create_autocmd("LspAttach", {
 -- "Ruled paper": a full-width underline under every row, so the buffer looks
 -- like a grid of rows. Only applied to normal file buffers (skips nvim-tree,
 -- telescope, neogit, etc.). Tweak `sp` for the line colour.
+--
+-- Performance: rather than a decoration provider (which re-runs on EVERY redraw,
+-- i.e. on every cursor move and makes the cursor crawl), we lay down persistent
+-- extmarks once and only refresh them when the buffer's text actually changes.
+-- Extmarks track line shifts automatically, so cursor movement does zero work.
 local ruled_ns = vim.api.nvim_create_namespace("ruled_paper")
 local function set_ruled_hl()
-    -- dotted, very subtle rule under each row (nightfox-native shade)
-    vim.api.nvim_set_hl(0, "RuledPaper", { underdotted = true, sp = "#29394f" })
+    -- Zebra striping instead of a dotted underline. underdotted is drawn as
+    -- per-cell underline escapes and, on iTerm + xterm-256color, repainting it
+    -- full-width on every line every redraw makes the cursor crawl. A background
+    -- fill renders for free; tinting every OTHER row gives the row-separation
+    -- look without any underline escapes. Tweak `bg` for the stripe colour.
+    vim.api.nvim_set_hl(0, "RuledPaper", { bg = "#1c2733" })
 end
 set_ruled_hl()
 -- re-apply after any colorscheme load (colorschemes clear custom highlights)
 vim.api.nvim_create_autocmd("ColorScheme", { callback = set_ruled_hl })
-vim.api.nvim_set_decoration_provider(ruled_ns, {
-    on_win = function(_, _, bufnr)
-        return vim.bo[bufnr].buftype == "" -- false → skip on_line for special buffers
-    end,
-    on_line = function(_, _, bufnr, row)
-        -- Use a range `hl_group` (not `line_hl_group`) so it renders with ephemeral
-        -- extmarks — line_hl_group is broken for ephemeral (neovim#32936).
+
+local function apply_ruled_paper(bufnr)
+    if not vim.api.nvim_buf_is_valid(bufnr) then return end
+    if vim.bo[bufnr].buftype ~= "" then return end -- skip special buffers
+    vim.api.nvim_buf_clear_namespace(bufnr, ruled_ns, 0, -1)
+    -- Persistent (non-ephemeral) extmarks let us use line_hl_group, which fills
+    -- the whole screen line. Tint every other row to create the zebra ruling.
+    for row = 0, vim.api.nvim_buf_line_count(bufnr) - 1, 2 do
         vim.api.nvim_buf_set_extmark(bufnr, ruled_ns, row, 0, {
-            end_row = row + 1,
-            end_col = 0,
-            hl_group = "RuledPaper",
-            hl_eol = true, -- extend the underline to full window width
-            ephemeral = true,
+            line_hl_group = "RuledPaper",
         })
+    end
+end
+
+vim.api.nvim_create_autocmd({ "BufWinEnter", "FileType", "TextChanged", "InsertLeave" }, {
+    group = vim.api.nvim_create_augroup("ruled_paper", { clear = true }),
+    callback = function(event)
+        apply_ruled_paper(event.buf)
     end,
 })
