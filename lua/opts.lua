@@ -69,10 +69,10 @@ vim.keymap.set("n", "<leader>g", toggle_neogit, { noremap = true, silent = true,
 -- Gitsigns  
 vim.keymap.set("n", "]g", function() require("gitsigns").next_hunk() end, { desc = "Next git hunk" })
 vim.keymap.set("n", "[g", function() require("gitsigns").prev_hunk() end, { desc = "Previous git hunk" })
-vim.keymap.set("n", "<leader>gs", function() require("gitsigns").stage_hunk() end, { desc = "Stage hunk" })
-vim.keymap.set("n", "<leader>gr", function() require("gitsigns").reset_hunk() end, { desc = "Reset hunk" })
-vim.keymap.set("n", "<leader>gp", function() require("gitsigns").preview_hunk() end, { desc = "Preview hunk" })
-vim.keymap.set("n", "<leader>gb", function() require("gitsigns").toggle_current_line_blame() end, { desc = "Toggle blame" })
+vim.keymap.set("n", "<leader>hs", function() require("gitsigns").stage_hunk() end, { desc = "Stage hunk" })
+vim.keymap.set("n", "<leader>hr", function() require("gitsigns").reset_hunk() end, { desc = "Reset hunk" })
+vim.keymap.set("n", "<leader>hp", function() require("gitsigns").preview_hunk() end, { desc = "Preview hunk" })
+vim.keymap.set("n", "<leader>hb", function() require("gitsigns").toggle_current_line_blame() end, { desc = "Toggle blame" })
 
 
 -- [[ LSP Keymaps ]]

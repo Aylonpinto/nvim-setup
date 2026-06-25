@@ -64,7 +64,7 @@ lazy.setup({
         "pwntester/octo.nvim",
         cmd = "Octo",
         keys = {
-            { "<leader>pr", "<cmd>Octo pr list<CR>", desc = "Octo PR list" },
+            { "<leader>P", "<cmd>Octo pr list<CR>", desc = "Octo PR list" },
             { "<leader>r", "<cmd>Octo review<CR>", desc = "Octo review" },
         },
         dependencies = {
