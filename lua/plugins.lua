@@ -90,22 +90,13 @@ lazy.setup({
         config = require("plugins.gitsigns"),
     },
 
-    -- Copilot setup
+    -- Windsurf (AI completions) setup
     {
-        "zbirenbaum/copilot.lua",
-        config = require("plugins.copilot-integration"),
-    },
-    {
-        "CopilotC-Nvim/CopilotChat.nvim",
+        "Exafunction/windsurf.nvim",
         dependencies = {
-            { "zbirenbaum/copilot.lua" },
             { "nvim-lua/plenary.nvim" },
         },
-        config = function()
-            require("CopilotChat").setup({
-                debug = false,
-            })
-        end,
+        config = require("plugins.windsurf-integration"),
     },
 
     -- LSP Icons and formatting

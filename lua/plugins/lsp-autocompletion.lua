@@ -26,7 +26,7 @@ return function()
 				mode = "symbol_text",
 				maxwidth = 50,
 				ellipsis_char = "...",
-				symbol_map = { Copilot = "" },
+				symbol_map = { Codeium = "" },
 			}),
 		},
 
@@ -50,8 +50,11 @@ return function()
 				if cmp.visible() and cmp.get_selected_entry() then
 					-- Only navigate if menu is open AND an item is selected
 					cmp.select_next_item()
+				elseif require("codeium.virtual_text").get_current_completion_item() then
+					-- Accept the Windsurf ghost text
+					local keys = require("codeium.virtual_text").accept()
+					vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, true, true), "n", false)
 				else
-					-- Always fallback to Copilot
 					fallback()
 				end
 			end, { "i", "s" }),
