@@ -22,7 +22,8 @@ return function()
         },
         lang = {
             python = {
-                coverage_command = ".venv/bin/coverage json --fail-under=0 -q -o -",
+                coverage_file = "backend/.coverage",
+                coverage_command = "backend/.venv/bin/coverage json --fail-under=0 -q -o -",
             },
         },
         auto_reload = true,

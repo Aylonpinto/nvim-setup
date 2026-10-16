@@ -62,7 +62,6 @@ vim.api.nvim_create_autocmd("FileType", {
         local file_exists = io.open(coverage_path, "r") ~= nil
 
         if file_exists and vim.g.coverage_loaded == 0 then
-            vim.cmd("cd " .. python_root)
             require("coverage").load(true)
             require("coverage").show()
             vim.g.coverage_loaded = 1
