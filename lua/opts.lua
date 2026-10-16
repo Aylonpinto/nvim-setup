@@ -28,7 +28,6 @@ vim.opt.termguicolors = true
 
 -- [[ Shell ]]
 vim.opt.shell = "/bin/zsh"
-vim.opt.shellcmdflag = "-ic"  -- -i makes it interactive, loading .zshrc
 
 -- Preserve virtual environment from parent shell
 local venv = vim.fn.getenv("VIRTUAL_ENV")
